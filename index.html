@@ -164,7 +164,7 @@
           <div class="pt-2 flex flex-col sm:flex-row gap-2">
             <div class="flex-1 bg-white rounded-2xl p-1.5 flex items-center border border-slate-300 text-slate-800 shadow-md">
               <i data-lucide="map-pin" class="w-5 h-5 text-blue-600 ml-2 shrink-0"></i>
-              <input type="text" id="guestQuickSearch" onkeyup="if(event.key==='Enter') searchStoresFromInput()" placeholder="역명 또는 동네 이름 (예: 신촌, 봉천, 안암, 역삼)" class="w-full bg-transparent px-3 py-1.5 text-xs text-slate-900 placeholder-slate-400 font-medium">
+              <input type="text" id="guestQuickSearch" onkeyup="if(event.key==='Enter') searchStoresFromInput()" placeholder="역명 또는 동네 이름 (예: 궁동, 둔산동, 대전역, 유성온천)" class="w-full bg-transparent px-3 py-1.5 text-xs text-slate-900 placeholder-slate-400 font-medium">
             </div>
             <button onclick="searchStoresFromInput()" class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md shrink-0">
               매장 찾기
@@ -173,27 +173,27 @@
         </div>
       </section>
 
-      <!-- ================= 1. 네이버 지도 (Naver Maps API v3 실시간 연동) ================= -->
+      <!-- ================= 1. 네이버 지도 (Naver Maps API v3 대전 권역 실시간 연동) ================= -->
       <section id="mapSection" class="bg-white rounded-3xl border border-slate-200 p-6 space-y-4 shadow-xs">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <div class="flex items-center gap-2">
-              <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">주변 이용 가능 매장 & 네이버 지도</h2>
+              <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">주변 이용 가능 매장 & 네이버 지도 (대전 권역)</h2>
               <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>NAVER Maps 실시간 슬롯 연동</span>
+                <span>NAVER Maps 대전 실시간 슬롯 연동</span>
               </span>
             </div>
             <p class="text-xs text-slate-500 mt-1">지도의 매장 핀을 누르면 슬롯 잔여 저장량과 실시간 냉동고 온도를 확인 가능함.</p>
           </div>
           
-          <!-- 지도 권역 바로가기 버튼들 -->
+          <!-- 지도 권역 바로가기 버튼들 (대전 주요 거점) -->
           <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
-            <button onclick="focusMapRegion('all')" class="px-2.5 py-1.5 rounded-xl bg-slate-900 text-white font-bold text-xs">전체 거점</button>
-            <button onclick="focusMapRegion('신촌')" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs">신촌</button>
-            <button onclick="focusMapRegion('봉천')" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs">봉천</button>
-            <button onclick="focusMapRegion('안암')" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs">안암</button>
-            <button onclick="focusMapRegion('역삼')" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs">역삼</button>
+            <button onclick="focusMapRegion('all')" class="px-2.5 py-1.5 rounded-xl bg-slate-900 text-white font-bold text-xs shrink-0">전체 대전</button>
+            <button onclick="focusMapRegion('궁동')" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs shrink-0">궁동(충남대)</button>
+            <button onclick="focusMapRegion('둔산')" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs shrink-0">둔산동</button>
+            <button onclick="focusMapRegion('대전역')" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs shrink-0">대전역(중앙로)</button>
+            <button onclick="focusMapRegion('유성온천')" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs shrink-0">유성온천</button>
           </div>
         </div>
 
@@ -203,7 +203,7 @@
           <!-- 실제 네이버 지도가 표시되는 DIV 컨테이너 -->
           <div id="naverMapContainer" style="width: 100%; height: 100%; min-height: 350px;"></div>
 
-          <!-- 네이버 API Key가 아직 등록되지 않았을 때 표시되는 인터랙티브 스마트맵 (Fallback 캔버스) -->
+          <!-- 네이버 API Key가 아직 등록되지 않았을 때 표시되는 인터랙티브 스마트맵 (대전 지리 모의 캔버스) -->
           <div id="mockMapFallback" class="absolute inset-0 w-full h-full">
             <svg class="absolute inset-0 w-full h-full object-cover opacity-60" viewBox="0 0 900 500" preserveAspectRatio="none">
               <defs>
@@ -213,11 +213,15 @@
               </defs>
               <rect width="900" height="500" fill="#0f172a" />
               <rect width="900" height="500" fill="url(#gridPattern)" />
-              <path d="M -20 280 Q 200 240, 400 310 T 920 270" fill="none" stroke="#1e3a8a" stroke-width="36" stroke-linecap="round" opacity="0.7"/>
-              <path d="M -20 280 Q 200 240, 400 310 T 920 270" fill="none" stroke="#3b82f6" stroke-width="4" stroke-linecap="round" opacity="0.3"/>
-              <text x="760" y="295" fill="#60a5fa" font-size="12" font-weight="bold" opacity="0.5">한강 (Han River)</text>
-              <path d="M 230 180 Q 320 150, 680 180 Q 750 320, 680 400 Q 350 440, 230 380 Z" fill="none" stroke="#059669" stroke-width="6" stroke-dasharray="6,4" opacity="0.5"/>
-              <text x="440" y="160" fill="#34d399" font-size="11" font-weight="bold" opacity="0.6">서울 지하철 2호선 순환망</text>
+              
+              <!-- 대전 갑천/유등천 물줄기 모식도 -->
+              <path d="M 150 -20 Q 300 200, 480 250 T 800 520" fill="none" stroke="#1e3a8a" stroke-width="32" stroke-linecap="round" opacity="0.6"/>
+              <path d="M 150 -20 Q 300 200, 480 250 T 800 520" fill="none" stroke="#3b82f6" stroke-width="4" stroke-linecap="round" opacity="0.3"/>
+              <text x="520" y="275" fill="#60a5fa" font-size="12" font-weight="bold" opacity="0.5">갑천 (Gapcheon)</text>
+
+              <!-- 대전 도시철도 1호선 노선도 모식도 (반석 - 유성온천 - 시청 - 대전역 - 판암) -->
+              <path d="M 180 420 L 320 360 L 520 330 L 750 370" fill="none" stroke="#059669" stroke-width="6" stroke-dasharray="6,4" opacity="0.5"/>
+              <text x="340" y="380" fill="#34d399" font-size="11" font-weight="bold" opacity="0.6">대전 도시철도 1호선축</text>
             </svg>
             <div id="mockMapPinsContainer" class="absolute inset-0"></div>
           </div>
@@ -227,7 +231,7 @@
 
           <div class="absolute bottom-3 right-3 z-10 bg-slate-900/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-700 text-[11px] font-bold text-slate-300 flex items-center gap-1.5">
             <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-            <span id="mapStatusBadge">네이버 지도 연동 모듈 가동 중 (Client ID 입력 시 네이버 정품 지도 활성화)</span>
+            <span id="mapStatusBadge">대전 네이버 지도 연동 모듈 가동 중</span>
           </div>
         </div>
 
@@ -1299,12 +1303,12 @@
       pw: 'TESTM2022'
     };
 
-    /* ---------- 매장 데이터 (실제 위도/경도 및 자체 맵 좌표) ---------- */
+    /* ---------- 매장 데이터 (대전광역시 주요 거점 위도/경도 및 모의 맵 좌표) ---------- */
     const STORES = [
-      { id: 'store-sc', name: '신촌 24시 무인 아이스크림점', region: '신촌', lat: 37.5552, lng: 126.9368, mapX: 25, mapY: 38, address: '서울 서대문구 신촌로 120', totalSlots: 8, availableSlots: 4, capacityL: 320, usedL: 150, currentTemp: -18.6, outage: false },
-      { id: 'store-bc', name: '봉천 스마트 밀키트24', region: '봉천', lat: 37.4795, lng: 126.9525, mapX: 38, mapY: 76, address: '서울 관악구 관악로 165', totalSlots: 6, availableSlots: 3, capacityL: 240, usedL: 110, currentTemp: -19.1, outage: false },
-      { id: 'store-am', name: '안암 대학가 픽업마트', region: '안암', lat: 37.5863, lng: 127.0298, mapX: 68, mapY: 26, address: '서울 성북구 고려대로 104', totalSlots: 8, availableSlots: 5, capacityL: 320, usedL: 105, currentTemp: -18.4, outage: false },
-      { id: 'store-ys', name: '역삼 24시 냉동창고 편의점', region: '역삼', lat: 37.5006, lng: 127.0365, mapX: 74, mapY: 68, address: '서울 강남구 테헤란로 152', totalSlots: 10, availableSlots: 2, capacityL: 400, usedL: 325, currentTemp: -18.8, outage: false }
+      { id: 'store-gd', name: '유성 궁동 24시 무인점 (충남대 대학가)', region: '궁동', lat: 36.3625, lng: 127.3450, mapX: 28, mapY: 40, address: '대전 유성구 대학로 151', totalSlots: 8, availableSlots: 4, capacityL: 320, usedL: 150, currentTemp: -18.6, outage: false },
+      { id: 'store-ds', name: '둔산 타임월드 스마트마트', region: '둔산', lat: 36.3520, lng: 127.3780, mapX: 48, mapY: 46, address: '대전 서구 둔산로 31', totalSlots: 6, availableSlots: 3, capacityL: 240, usedL: 110, currentTemp: -19.1, outage: false },
+      { id: 'store-dj', name: '대전역 중앙로 픽업점', region: '대전역', lat: 36.3315, lng: 127.4330, mapX: 78, mapY: 62, address: '대전 동구 중앙로 218', totalSlots: 8, availableSlots: 5, capacityL: 320, usedL: 105, currentTemp: -18.4, outage: false },
+      { id: 'store-ys', name: '유성온천역 24시 편의점', region: '유성온천', lat: 36.3535, lng: 127.3415, mapX: 25, mapY: 56, address: '대전 유성구 계룡로 105', totalSlots: 10, availableSlots: 2, capacityL: 400, usedL: 325, currentTemp: -18.8, outage: false }
     ];
 
     function makeSamplePhotoSvg(emoji, bg) {
@@ -1316,16 +1320,16 @@
     const appState = {
       role: 'guest', // guest | host | admin
       user: null,    // 요구사항 1: 기본 미로그인 상태로 설정함!
-      selectedHostStoreId: 'store-sc',
+      selectedHostStoreId: 'store-gd',
       hostSubTab: 'verify',
       adminTab: 'claims',
       myPageTab: 'storage',
       inquiryType: 'store',
-      selectedMapStoreId: 'store-sc',
+      selectedMapStoreId: 'store-gd',
       bookings: [
         {
           id: 'BK-701',
-          storeId: 'store-sc',
+          storeId: 'store-gd',
           slotId: 'SLOT 03',
           userName: '김민지',
           category: 'food',
@@ -1342,7 +1346,7 @@
         },
         {
           id: 'BK-702',
-          storeId: 'store-sc',
+          storeId: 'store-gd',
           slotId: 'SLOT 05',
           userName: '김민지',
           category: 'camping',
@@ -1362,7 +1366,7 @@
         {
           id: 'CL-801',
           bookingId: 'BK-701',
-          storeId: 'store-sc',
+          storeId: 'store-gd',
           source: 'guest',
           incidentType: 'melted',
           stickerColor: 'red',
@@ -1379,7 +1383,7 @@
         {
           id: 'Q-901',
           type: 'store',
-          storeId: 'store-sc',
+          storeId: 'store-gd',
           category: '보관 품목 규격 확인',
           title: '아이스크림 케이크 상자째 보관 가능한가요?',
           content: '생일 파티용 아이스크림 케이크 박스(가로 26cm)인데 M슬롯에 들어가나요?',
@@ -1393,7 +1397,7 @@
         { desc: '신규 회원 가입 웰컴 보너스', amount: '+1,000 M', date: '오늘' }
       ],
       bookingDraft: {
-        storeId: 'store-sc',
+        storeId: 'store-gd',
         volumeL: 10,
         preset: 'M',
         photos: []
