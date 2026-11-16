@@ -21,7 +21,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 
   <!-- 네이버 지도 JavaScript API v3 (NCP 정품 지도 연동) -->
-  <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=159pfwg234"></script>
+  <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=159pfwg234" onload="if (window.initNaverMap) window.initNaverMap();"></script>
 
   <style>
     body {
@@ -682,7 +682,7 @@
       <div class="font-bold text-white text-sm">KeepIn Cool (킵인쿨)</div>
       <p class="text-[11px] text-slate-400 leading-relaxed">
         B2P 단기 신선·냉동 보관 플랫폼 | 24시 무인 매장 남는 슬롯 공유 네트워크 | 사업자등록번호: 104-81-29482<br />
-        주소: 서울특별시 서대문구 신촌로 120, 4층 | 대표전화: 1588-4282 | 이메일: support@keepincool.io
+        주소: 대전광역시 유성구 대학로 99, 4층 | 대표전화: 1588-4282 | 이메일: support@keepincool.io
       </p>
       <div class="flex justify-center gap-4 text-xs font-semibold text-slate-300">
         <button type="button" onclick="openTermsModal()" class="hover:text-blue-400 underline">공간 임대차 표준약관</button>
@@ -826,7 +826,7 @@
                 <span class="text-xl">🏪</span>
                 <div>
                   <div class="text-xs font-black group-hover:text-emerald-700">점주(호스트) 파트너 홈페이지</div>
-                  <div class="text-[10px] text-emerald-600 font-normal">박상혁 점주 · 신촌점 슬롯 관리 및 검수</div>
+                  <div class="text-[10px] text-emerald-600 font-normal">박상혁 점주 · 궁동점 슬롯 관리 및 검수</div>
                 </div>
               </div>
               <span class="text-[10px] font-bold text-emerald-700 bg-white px-2 py-1 rounded-lg border border-emerald-200">접속 →</span>
@@ -1200,11 +1200,11 @@
         </div>
         <div>
           <label class="block font-bold text-slate-700 mb-1">매장명</label>
-          <input type="text" id="haStoreName" required placeholder="예: 신촌 24시 아이스크림 천국" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs">
+          <input type="text" id="haStoreName" required placeholder="예: 대전 궁동 24시 아이스크림 천국" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs">
         </div>
         <div>
           <label class="block font-bold text-slate-700 mb-1">매장 위치 주소</label>
-          <input type="text" id="haStoreAddr" required placeholder="예: 서울시 서대문구 신촌로 99" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs">
+          <input type="text" id="haStoreAddr" required placeholder="예: 대전 유성구 대학로 99" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs">
         </div>
         <div class="grid grid-cols-2 gap-2">
           <div>
@@ -1432,9 +1432,31 @@
       if (window.lucide) lucide.createIcons();
     });
 
+    window.addEventListener('load', () => {
+      // 모든 외부 리소스(네이버 지도 SDK) 로드 완료 시 지도 재초기화 보장
+      setTimeout(() => {
+        if (typeof naver !== 'undefined' && naver.maps && !naverMapInstance) {
+          initNaverMap();
+        }
+      }, 150);
+    });
+
     /* ================= 1. 네이버 지도 (Naver Maps SDK v3) & 스마트 맵 인터랙션 ================= */
     let naverMapInstance = null;
     const naverMarkers = [];
+
+    // 네이버 지도 인증 실패 시 공식 콜백
+    window.naver_map_auth_failure = function() {
+      console.warn('⚠️ 네이버 지도 Open API 인증 실패: NCP 콘솔 설정(Web 서비스 URL 및 Dynamic Map 활성화) 확인 필요');
+      const badge = $('mapStatusBadge');
+      if (badge) {
+        badge.innerText = '인증 확인 필요 (스마트 그래픽맵 전환됨)';
+        badge.className = 'px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[11px] border border-amber-500/30';
+      }
+      const fallback = $('mockMapFallback');
+      if (fallback) fallback.classList.remove('hidden');
+      renderMockMapPins();
+    };
 
     function initNaverMap() {
       // 1) 네이버 지도 공식 SDK 로드 여부 검사
@@ -1455,7 +1477,10 @@
         if (fallback) fallback.classList.add('hidden');
 
         const badge = $('mapStatusBadge');
-        if (badge) badge.innerText = '네이버 지도(NAVER Maps) 정품 API 활성화됨';
+        if (badge) {
+          badge.innerText = '네이버 지도(NAVER Maps) 정품 API 활성화됨';
+          badge.className = 'px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-[11px] border border-emerald-500/30';
+        }
 
         // 이미 생성된 경우 중심점만 리사이즈
         if (naverMapInstance) {
@@ -1464,7 +1489,7 @@
         }
 
         const mapOptions = {
-          center: new naver.maps.LatLng(37.535, 126.985), // 서울 중심
+          center: new naver.maps.LatLng(36.3504, 127.3845), // 대전 중심 좌표
           zoom: 12,
           minZoom: 10,
           maxZoom: 19,
@@ -1606,11 +1631,11 @@
 
     function focusMapRegion(region) {
       if (region === 'all') {
-        selectMapStore('store-sc');
+        selectMapStore('store-gd');
         if (naverMapInstance && typeof naver !== 'undefined' && naver.maps) {
-          naverMapInstance.morph(new naver.maps.LatLng(37.535, 126.985), 12);
+          naverMapInstance.morph(new naver.maps.LatLng(36.3504, 127.3845), 12);
         }
-        showToast('📍 서울 전체 거점 매장 핀을 표시함.', 'info');
+        showToast('📍 대전 전체 거점 매장 핀을 표시함.', 'info');
       } else {
         const found = STORES.find(s => s.region === region);
         if (found) {
@@ -1636,7 +1661,7 @@
         return;
       }
 
-      // 네이버 지오코딩(주소/지명 검색) 연동
+      // 네이버 지오코딩(주소/지명 검색) 연동 (서브모듈 활성화 시에만 호출)
       if (typeof naver !== 'undefined' && naver.maps && naver.maps.Service && naver.maps.Service.geocode && naverMapInstance) {
         naver.maps.Service.geocode({ query: q }, (status, response) => {
           if (status === naver.maps.Service.Status.OK && response.v2 && response.v2.addresses.length > 0) {
@@ -1651,7 +1676,7 @@
         return;
       }
 
-      showToast('일치하는 매장을 찾지 못함. (신촌, 봉천, 안암, 역삼 중 검색)', 'error');
+      showToast('일치하는 매장을 찾지 못함. (궁동, 둔산, 대전역, 유성온천 중 검색)', 'error');
     }
 
     function renderStoreCards() {
