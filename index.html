@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
@@ -511,8 +511,25 @@
           </button>
         </div>
 
-        <div id="hostPanelVerify" class="space-y-3">
-          <p class="text-xs text-slate-500">게스트가 입고 시 업로드한 사진과 실제 냉동고 슬롯 안 물품이 일치하는지 대조함.</p>
+        <div id="hostPanelVerify" class="space-y-4">
+          <!-- 고객 바코드 스캔 & 스티커 발급 배너 -->
+          <div class="p-4 bg-gradient-to-r from-emerald-700 to-teal-800 rounded-2xl text-white shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-xl shrink-0">
+                📷
+              </div>
+              <div>
+                <h4 class="font-extrabold text-xs sm:text-sm">고객 방문 입고 검수 & 안심 스티커 발급</h4>
+                <p class="text-[11px] text-emerald-100">고객이 제시한 모바일 바코드를 확인하고 -18°C 변색 안심 스티커(TTI)를 발급해 주세요.</p>
+              </div>
+            </div>
+            <button onclick="openHostScanModal()" class="px-4 py-2 bg-white text-emerald-950 font-black text-xs rounded-xl hover:bg-emerald-50 shadow-sm transition shrink-0 flex items-center gap-1.5">
+              <i data-lucide="scan" class="w-3.5 h-3.5"></i>
+              <span>바코드 스캔 / 발급</span>
+            </button>
+          </div>
+
+          <p class="text-xs text-slate-500">게스트가 입고 시 업로드한 사진과 발급된 안심 스티커 일련번호 대조 목록임.</p>
           <div id="hostVerifyCardList" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
         </div>
 
@@ -1399,6 +1416,199 @@
     <img id="lightboxImage" src="" alt="확대 사진" class="max-w-full max-h-[85vh] rounded-2xl bg-white shadow-2xl">
   </div>
 
+  <!-- ================= [신규 모달 11] 고객 매장 입고용 모바일 바코드 ================= -->
+  <div id="modalBarcode" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full shadow-2xl border border-slate-200 overflow-hidden">
+      
+      <!-- 상단 헤더 -->
+      <div class="bg-slate-900 text-white px-5 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i data-lucide="qr-code" class="w-5 h-5 text-blue-400"></i>
+          <div>
+            <span class="text-[10px] text-blue-400 font-bold uppercase tracking-wider">KeepIn Cool Pass</span>
+            <h3 class="text-sm font-black">매장 입고 모바일 바코드</h3>
+          </div>
+        </div>
+        <button onclick="closeModal('modalBarcode')" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="p-5 text-center space-y-4">
+        <!-- 예약 정보 요약 -->
+        <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 text-xs text-left space-y-1.5">
+          <div class="flex justify-between items-center">
+            <span class="text-slate-400">예약 번호:</span>
+            <strong id="barcodeModalBookingId" class="font-mono text-blue-700 font-black">BK-702</strong>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-slate-400">보관 매장:</span>
+            <strong id="barcodeModalStoreName" class="text-slate-800 font-bold">유성 궁동 24시 무인점</strong>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-slate-400">배정 슬롯:</span>
+            <strong id="barcodeModalSlotId" class="text-emerald-700 font-black">SLOT 05 (20L)</strong>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-slate-400">보관 품목:</span>
+            <span id="barcodeModalItemName" class="text-slate-800 font-bold truncate max-w-[170px]">캠핑용 쿨러</span>
+          </div>
+        </div>
+
+        <!-- 바코드 비주얼 그래픽 -->
+        <div class="p-4 bg-white border-2 border-dashed border-slate-300 rounded-2xl flex flex-col items-center justify-center space-y-2">
+          <svg class="w-64 h-16" viewBox="0 0 260 70">
+            <rect x="10" y="5" width="3" height="50" fill="#0f172a"/>
+            <rect x="16" y="5" width="2" height="50" fill="#0f172a"/>
+            <rect x="22" y="5" width="5" height="50" fill="#0f172a"/>
+            <rect x="30" y="5" width="2" height="50" fill="#0f172a"/>
+            <rect x="36" y="5" width="4" height="50" fill="#0f172a"/>
+            <rect x="43" y="5" width="2" height="50" fill="#0f172a"/>
+            <rect x="48" y="5" width="6" height="50" fill="#0f172a"/>
+            <rect x="58" y="5" width="3" height="50" fill="#0f172a"/>
+            <rect x="64" y="5" width="2" height="50" fill="#0f172a"/>
+            <rect x="70" y="5" width="4" height="50" fill="#0f172a"/>
+            <rect x="78" y="5" width="7" height="50" fill="#0f172a"/>
+            <rect x="88" y="5" width="2" height="50" fill="#0f172a"/>
+            <rect x="94" y="5" width="5" height="50" fill="#0f172a"/>
+            <rect x="102" y="5" width="3" height="50" fill="#0f172a"/>
+            <rect x="110" y="5" width="2" height="50" fill="#0f172a"/>
+            <rect x="115" y="5" width="6" height="50" fill="#0f172a"/>
+            <rect x="125" y="5" width="4" height="50" fill="#0f172a"/>
+            <rect x="132" y="5" width="2" height="50" fill="#0f172a"/>
+            <rect x="138" y="5" width="5" height="50" fill="#0f172a"/>
+            <rect x="146" y="5" width="3" height="50" fill="#0f172a"/>
+            <rect x="153" y="5" width="6" height="50" fill="#0f172a"/>
+            <rect x="163" y="5" width="2" height="50" fill="#0f172a"/>
+            <rect x="170" y="5" width="4" height="50" fill="#0f172a"/>
+            <rect x="178" y="5" width="5" height="50" fill="#0f172a"/>
+            <rect x="187" y="5" width="2" height="50" fill="#0f172a"/>
+            <rect x="193" y="5" width="6" height="50" fill="#0f172a"/>
+            <rect x="202" y="5" width="3" height="50" fill="#0f172a"/>
+            <rect x="208" y="5" width="5" height="50" fill="#0f172a"/>
+            <rect x="216" y="5" width="2" height="50" fill="#0f172a"/>
+            <rect x="222" y="5" width="4" height="50" fill="#0f172a"/>
+            <rect x="230" y="5" width="7" height="50" fill="#0f172a"/>
+            <rect x="240" y="5" width="2" height="50" fill="#0f172a"/>
+            <rect x="246" y="5" width="4" height="50" fill="#0f172a"/>
+            <text x="130" y="66" font-family="monospace" font-size="12" font-weight="bold" text-anchor="middle" fill="#0f172a" id="barcodeModalSvgCode">BK-702-1937</text>
+          </svg>
+          <div class="flex items-center gap-2">
+            <span class="text-[11px] text-slate-500 font-bold">인증 PIN:</span>
+            <span id="barcodeModalPinCode" class="font-mono text-sm font-black tracking-widest text-slate-900 bg-slate-100 px-2 py-0.5 rounded-lg border border-slate-300">1937</span>
+          </div>
+        </div>
+
+        <!-- 스티커 발급 안내 -->
+        <div class="p-3 bg-blue-50 rounded-2xl border border-blue-200 text-blue-900 text-[11px] text-left leading-relaxed space-y-1">
+          <div class="font-bold flex items-center gap-1 text-blue-800">
+            <span>🏷️</span>
+            <span>안심 스티커 발급 절차</span>
+          </div>
+          <p>
+            매장 점주에게 본 바코드를 제시하면, 점주가 확인 후 <strong>'온도 변색 안심 스티커(TTI)'</strong>를 전달합니다. 물품에 스티커를 부착하고 슬롯에 보관하면 10만원 안심 보험이 활성화됩니다.
+          </p>
+        </div>
+
+        <button onclick="closeModal('modalBarcode')" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs transition">
+          닫기
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= [신규 모달 12] 점주 바코드 스캐너 & 안심 스티커 발급 ================= -->
+  <div id="modalHostScan" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[92vh]">
+      
+      <!-- 상단 헤더 -->
+      <div class="bg-slate-900 text-white px-5 py-4 flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-2">
+          <i data-lucide="scan-line" class="w-5 h-5 text-emerald-400"></i>
+          <div>
+            <span class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Host Barcode Scanner</span>
+            <h3 class="text-sm font-black">고객 바코드 확인 & 안심 스티커 발급</h3>
+          </div>
+        </div>
+        <button onclick="closeModal('modalHostScan')" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="p-5 space-y-4 text-xs overflow-y-auto">
+        
+        <!-- 바코드 스캐너 시뮬레이터 -->
+        <div class="relative bg-slate-900 rounded-2xl p-4 text-center overflow-hidden border border-slate-700">
+          <div class="absolute inset-x-0 h-0.5 bg-rose-500 shadow-[0_0_8px_#f43f5e] animate-pulse top-1/2 -translate-y-1/2"></div>
+          
+          <div class="relative z-10 space-y-2">
+            <i data-lucide="camera" class="w-7 h-7 text-slate-500 mx-auto"></i>
+            <p class="text-slate-300 font-bold text-xs">고객의 모바일 바코드를 카메라에 비추거나 번호를 입력하세요</p>
+            <div class="flex gap-1.5 max-w-xs mx-auto pt-1">
+              <input type="text" id="hostScanInput" placeholder="예약번호 (예: BK-702)" class="flex-1 px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-600 text-white text-xs font-mono text-center">
+              <button onclick="hostLookupBarcode()" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs">조회</button>
+            </div>
+          </div>
+
+          <!-- 시연용 원클릭 테스트 버튼 -->
+          <div class="mt-3 pt-2.5 border-t border-slate-800 flex justify-center">
+            <button type="button" onclick="hostSimulateScan('BK-702')" class="px-3 py-1.5 rounded-full bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-[11px] font-bold border border-emerald-500/40 flex items-center gap-1 transition">
+              <span>⚡ [원클릭 스캔 시연] BK-702 (김민지 고객 입고 대기 건)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 스캔된 예약 상세 카드 -->
+        <div id="hostScanResultBox" class="hidden space-y-3">
+          <div class="p-4 bg-emerald-50/60 rounded-2xl border border-emerald-200 space-y-2">
+            <div class="flex justify-between items-center pb-2 border-b border-emerald-200/60">
+              <span class="px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-bold">✓ 예약 바코드 일치 확인됨</span>
+              <span id="scanResBookingId" class="font-mono font-bold text-emerald-900">BK-702</span>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-2 text-[11px]">
+              <div><span class="text-slate-400">고객명:</span> <strong id="scanResUserName" class="text-slate-800">김민지</strong></div>
+              <div><span class="text-slate-400">배정 슬롯:</span> <strong id="scanResSlotId" class="text-blue-700 font-black">SLOT 05 (20L)</strong></div>
+              <div class="col-span-2"><span class="text-slate-400">보관 품목:</span> <strong id="scanResItemName" class="text-slate-900">캠핑용 대형 쿨러 아이스팩 4개</strong></div>
+            </div>
+
+            <div>
+              <span class="text-[10px] text-slate-400 font-bold block mb-1">고객 사전 등록 사진:</span>
+              <div id="scanResPhotos" class="flex gap-2"></div>
+            </div>
+          </div>
+
+          <!-- 스티커 발급 설정 영역 -->
+          <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-1.5">
+                <span class="text-base">🏷️</span>
+                <span class="font-bold text-slate-800">온도 변색 안심 스티커(TTI) 발급</span>
+              </div>
+              <span class="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">-18°C 영구 변색형</span>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <label class="text-[11px] text-slate-500 shrink-0 font-medium">스티커 일련번호:</label>
+              <input type="text" id="scanStickerSerial" readonly value="TTI-9105" class="w-full px-3 py-1.5 rounded-xl border border-slate-300 bg-white font-mono font-bold text-blue-700 text-xs text-center">
+            </div>
+
+            <p class="text-[10.5px] text-slate-500 leading-relaxed">
+              위 번호의 실물 안심 스티커를 고객 물품에 부착하거나 고객에게 전달한 뒤 아래 [입고 승인] 버튼을 누르면 슬롯 오픈 및 정식 보관이 시작됩니다.
+            </p>
+
+            <button type="button" onclick="hostApproveBookingWithSticker()" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow-md shadow-emerald-600/20 transition flex items-center justify-center gap-1.5">
+              <i data-lucide="check-circle" class="w-4 h-4"></i>
+              <span>스티커 발급 & 슬롯 오픈 입고 승인</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
   <!-- 토스트 알림 컨테이너 -->
   <div id="toastContainer" class="fixed bottom-4 right-4 z-50 space-y-2 pointer-events-none"></div>
 
@@ -1458,6 +1668,7 @@
           demoOffsetHours: 0,
           status: 'active',
           checkedIn: true,
+          stickerSerial: 'TTI-8821',
           pin: '4821',
           history: [],
           maxTemp: -18.2
@@ -1475,6 +1686,7 @@
           demoOffsetHours: 0,
           status: 'active',
           checkedIn: false,
+          stickerSerial: null,
           pin: '1937',
           history: [],
           maxTemp: -18.4
@@ -2487,30 +2699,40 @@
       $('badgeHostVerifyCount').innerText = storeBookings.filter(b => !b.checkedIn).length;
 
       $('hostVerifyCardList').innerHTML = storeBookings.length ? storeBookings.map(b => `
-        <div class="p-4 rounded-2xl border ${b.checkedIn ? 'border-slate-200 bg-white' : 'border-amber-300 bg-amber-50/40'} space-y-2">
+        <div class="p-4 rounded-2xl border ${b.checkedIn ? 'border-slate-200 bg-white' : 'border-amber-300 bg-amber-50/50'} space-y-2.5">
           <div class="flex items-center justify-between">
             <span class="text-xs font-bold text-slate-800">${b.slotId} · ${b.itemName}</span>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded ${b.checkedIn ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-100 text-amber-800'}">
-              ${b.checkedIn ? '입고 대조 완료' : '대조 검수 필요'}
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded ${b.checkedIn ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-amber-100 text-amber-800 border border-amber-300'}">
+              ${b.checkedIn ? '✓ 입고 & 스티커 발급 완료' : '⚠️ 바코드 미스캔 (입고 대기)'}
             </span>
           </div>
-          <div class="flex gap-2">
-            ${b.photos.map(p => `<img src="${p}" onclick="openLightbox('${p}')" class="w-14 h-14 rounded-xl object-cover border border-slate-200 cursor-zoom-in">`).join('')}
-          </div>
-          <div class="text-[11px] text-slate-500">
-            게스트: <strong>${b.userName}</strong> · 부피: ${b.volumeL}L
+          <div class="flex gap-2.5">
+            ${b.photos.map(p => `<img src="${p}" onclick="openLightbox('${p}')" class="w-14 h-14 rounded-xl object-cover border border-slate-200 cursor-zoom-in shrink-0">`).join('')}
+            <div class="text-[11px] text-slate-500 space-y-0.5 min-w-0">
+              <p>게스트: <strong class="text-slate-800">${b.userName}</strong> (${b.id})</p>
+              <p>부피: ${b.volumeL}L · 인증PIN: <span class="font-mono font-bold">${b.pin}</span></p>
+              ${b.checkedIn ? `
+                <p class="pt-0.5 font-bold text-blue-700 font-mono text-[10.5px]">🏷️ 발급 스티커: ${b.stickerSerial || 'TTI-8821'}</p>
+              ` : `
+                <p class="pt-0.5 text-amber-800 font-bold text-[10.5px]">스티커 미발급 상태</p>
+              `}
+            </div>
           </div>
           ${!b.checkedIn ? `
-            <div class="flex gap-1.5 pt-1">
-              <button onclick="hostConfirmBooking('${b.id}')" class="flex-1 py-1.5 bg-emerald-700 text-white rounded-lg text-xs font-bold hover:bg-emerald-800">
-                실물 일치 확인
-              </button>
-              <button onclick="hostRejectBooking('${b.id}')" class="px-3 py-1.5 bg-white border border-slate-300 text-slate-600 rounded-lg text-xs font-bold">
-                불일치 알림
+            <div class="pt-1">
+              <button onclick="openHostScanModal('${b.id}')" class="w-full py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-black shadow-xs flex items-center justify-center gap-1.5 transition">
+                <i data-lucide="scan" class="w-3.5 h-3.5"></i>
+                <span>고객 바코드 스캔 & 스티커 발급하기</span>
               </button>
             </div>
           ` : `
-            <span class="text-[11px] font-bold text-emerald-700 block">✓ 사진 대조 완료되어 정상 보관 중임</span>
+            <div class="pt-1 flex items-center justify-between text-[11px] border-t border-slate-100">
+              <span class="font-bold text-emerald-700 flex items-center gap-1">
+                <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+                <span>실물 일치 대조 및 정상 보관 중</span>
+              </span>
+              <button onclick="openLightbox('${b.photos[0]}')" class="text-slate-400 hover:text-slate-600 text-[10px]">사진 확대</button>
+            </div>
           `}
         </div>
       `).join('') : '<div class="sm:col-span-2 p-6 rounded-2xl border border-dashed border-slate-300 text-center text-xs text-slate-400">현재 보관 중인 물품이 없음.</div>';
@@ -2556,6 +2778,117 @@
           `}
         </div>
       `).join('') : '<div class="p-4 rounded-xl border border-dashed border-slate-300 text-center text-xs text-slate-400">새로운 손님 문의가 없음.</div>';
+    }
+
+    /* ---------- [신규] 고객 바코드 팝업 & 점주 바코드 스캔/스티커 발급 엔진 ---------- */
+    let currentScanningBookingId = null;
+
+    function openBarcodeModal(bookingId) {
+      const b = appState.bookings.find(x => x.id === bookingId);
+      if (!b) return;
+
+      const store = STORES.find(s => s.id === b.storeId);
+      const bIdEl = $('barcodeModalBookingId');
+      const sNameEl = $('barcodeModalStoreName');
+      const slotEl = $('barcodeModalSlotId');
+      const itemEl = $('barcodeModalItemName');
+      const svgCodeEl = $('barcodeModalSvgCode');
+      const pinEl = $('barcodeModalPinCode');
+
+      if (bIdEl) bIdEl.innerText = b.id;
+      if (sNameEl) sNameEl.innerText = store ? store.name : '지정 매장';
+      if (slotEl) slotEl.innerText = `${b.slotId} (${b.volumeL}L)`;
+      if (itemEl) itemEl.innerText = b.itemName;
+      if (svgCodeEl) svgCodeEl.innerText = `${b.id}-${b.pin}`;
+      if (pinEl) pinEl.innerText = b.pin;
+
+      openModal('modalBarcode');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function openHostScanModal(bookingId = null) {
+      currentScanningBookingId = null;
+      const input = $('hostScanInput');
+      const resultBox = $('hostScanResultBox');
+
+      if (input) input.value = '';
+      if (resultBox) resultBox.classList.add('hidden');
+
+      openModal('modalHostScan');
+      if (window.lucide) lucide.createIcons();
+
+      // 특정 예약건을 바로 조회해야 할 때
+      if (bookingId) {
+        if (input) input.value = bookingId;
+        hostLookupBarcode(bookingId);
+      }
+    }
+
+    function hostLookupBarcode(codeOverride = null) {
+      const code = (codeOverride || ($('hostScanInput') ? $('hostScanInput').value.trim() : '')).toUpperCase();
+      if (!code) {
+        showToast('조회할 바코드/예약번호를 입력해 주기 바람.', 'error');
+        return;
+      }
+
+      // 예약번호 또는 PIN 매칭
+      const matched = appState.bookings.find(b => b.id.toUpperCase() === code || `${b.id}-${b.pin}`.toUpperCase() === code || b.id.toUpperCase().includes(code));
+
+      if (matched) {
+        hostShowScanResult(matched);
+      } else {
+        showToast(`'${code}'에 해당하는 예약 건을 찾지 못함.`, 'error');
+      }
+    }
+
+    function hostSimulateScan(targetId) {
+      const id = targetId || 'BK-702';
+      const input = $('hostScanInput');
+      if (input) input.value = id;
+      hostLookupBarcode(id);
+      showToast(`📷 [바코드 스캔 성공] ${id} 인식이 완료되었음.`, 'success');
+    }
+
+    function hostShowScanResult(b) {
+      currentScanningBookingId = b.id;
+      const resultBox = $('hostScanResultBox');
+      if (!resultBox) return;
+
+      $('scanResBookingId').innerText = b.id;
+      $('scanResUserName').innerText = `${b.userName} (${b.userName === '김민지' ? '010-1234-5678' : '고객'})`;
+      $('scanResSlotId').innerText = `${b.slotId} (${b.volumeL}L)`;
+      $('scanResItemName').innerText = b.itemName;
+
+      const photosContainer = $('scanResPhotos');
+      if (photosContainer) {
+        photosContainer.innerHTML = b.photos.map(p => `
+          <img src="${p}" onclick="openLightbox('${p}')" class="w-14 h-14 rounded-xl object-cover border border-slate-200 cursor-zoom-in">
+        `).join('');
+      }
+
+      // 새 스티커 시리얼 자동 배정 (없으면 새로 생성)
+      const serial = b.stickerSerial || `TTI-${Math.floor(1000 + Math.random() * 9000)}`;
+      $('scanStickerSerial').value = serial;
+
+      resultBox.classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function hostApproveBookingWithSticker() {
+      if (!currentScanningBookingId) return;
+      const b = appState.bookings.find(x => x.id === currentScanningBookingId);
+      if (!b) return;
+
+      const serial = $('scanStickerSerial').value || `TTI-${Math.floor(1000 + Math.random() * 9000)}`;
+      b.checkedIn = true;
+      b.stickerSerial = serial;
+
+      closeModal('modalHostScan');
+      showToast(`🎉 [${b.userName} 고객 ${b.id}] 안심 스티커(${serial}) 발급 & 슬롯 오픈 완료!`, 'success');
+
+      renderHostPortal();
+      renderMyBookings();
+      renderMyPageContent();
     }
 
     function hostConfirmBooking(id) {
@@ -2799,44 +3132,81 @@
       container.innerHTML = myBookings.map(b => {
         const store = STORES.find(s => s.id === b.storeId);
         const isActive = b.status === 'active';
+        const isCheckedIn = b.checkedIn;
         const elapsedHours = Math.max(1, Math.ceil((Date.now() - b.startAt) / 3600000 + b.demoOffsetHours));
         const hourlyRate = Math.round(PRICE_PER_HOUR_10L * (b.volumeL / 10));
         const currFee = hourlyRate * elapsedHours;
 
         return `
-          <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-3 flex flex-col justify-between">
+          <div class="p-4 rounded-2xl bg-white border ${!isCheckedIn && isActive ? 'border-amber-300 ring-2 ring-amber-100' : 'border-slate-200'} shadow-xs space-y-3 flex flex-col justify-between">
             <div class="space-y-2">
               <div class="flex items-center justify-between">
-                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${isActive ? 'bg-blue-50 text-blue-700' : 'bg-slate-100 text-slate-500'}">
-                  ${isActive ? '보관 중' : '출고 완료'}
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${isActive ? (isCheckedIn ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-amber-100 text-amber-800 border border-amber-300') : 'bg-slate-100 text-slate-500'}">
+                  ${isActive ? (isCheckedIn ? '❄️ 안심 보관 중' : '📱 입고 대기 (바코드 미스캔)') : '출고 완료'}
                 </span>
                 <span class="font-mono text-[10px] text-slate-400">${b.id}</span>
               </div>
               <div class="flex gap-3">
                 <img src="${b.photos[0]}" onclick="openLightbox('${b.photos[0]}')" class="w-16 h-16 rounded-xl object-cover border border-slate-200 cursor-zoom-in shrink-0">
-                <div class="min-w-0">
+                <div class="min-w-0 flex-1">
                   <h4 class="font-extrabold text-sm text-slate-900 truncate">${b.itemName}</h4>
                   <p class="text-[11px] text-slate-500 truncate">${store.name} · ${b.slotId}</p>
-                  <p class="text-[10px] text-slate-400">부피 ${b.volumeL}L · ${isActive ? (b.checkedIn ? '✓ 점주 검수 완료' : '점주 검수 대기 중') : '정산 완료'}</p>
+                  <div class="mt-1">
+                    ${isCheckedIn ? `
+                      <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 font-mono text-[10px] font-bold border border-blue-200">
+                        🏷️ 스티커: ${b.stickerSerial || 'TTI-8821'} 부착됨
+                      </span>
+                    ` : `
+                      <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 text-[10px] font-bold border border-amber-200">
+                        점주 확인 및 스티커 미수령 상태
+                      </span>
+                    `}
+                  </div>
                 </div>
               </div>
+
+              <!-- 입고 대기 상태일 때 강조되는 바코드 제시 배너 -->
+              ${!isCheckedIn && isActive ? `
+                <div class="p-2.5 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl space-y-1.5">
+                  <div class="flex items-center justify-between text-[11px]">
+                    <span class="font-bold text-blue-900 flex items-center gap-1">
+                      <span>🏪</span>
+                      <span>매장 방문 시 점주에게 제시</span>
+                    </span>
+                    <span class="font-mono text-blue-700 font-bold">PIN: ${b.pin}</span>
+                  </div>
+                  <button onclick="openBarcodeModal('${b.id}')" class="w-full py-2 bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white rounded-lg text-xs font-black shadow-xs flex items-center justify-center gap-1.5 transition">
+                    <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
+                    <span>입고 바코드 열기 (안심 스티커 수령)</span>
+                  </button>
+                </div>
+              ` : ''}
+
               <div class="p-2.5 bg-slate-50 rounded-xl grid grid-cols-2 gap-1 text-[11px]">
                 <div><span class="text-slate-400">보관 시간:</span> <strong class="text-slate-800">${elapsedHours}시간</strong></div>
                 <div><span class="text-slate-400">누적 요금:</span> <strong class="text-blue-600">${isActive ? currFee.toLocaleString() : b.paidAmount.toLocaleString()}원</strong></div>
               </div>
             </div>
+
             <div class="pt-2 border-t border-slate-100 flex items-center gap-1.5">
-              ${isActive ? `
-                <button onclick="selectMonitorBooking('${b.id}')" class="flex-1 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold">
+              ${isActive ? (isCheckedIn ? `
+                <button onclick="selectMonitorBooking('${b.id}')" class="flex-1 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition">
                   온도 그래프
                 </button>
-                <button onclick="openCheckout('${b.id}')" class="flex-1 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold">
+                <button onclick="openCheckout('${b.id}')" class="flex-1 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition">
                   출고 결제
                 </button>
-                <button onclick="fastForwardTime('${b.id}')" title="데모용 12시간 경과" class="p-1.5 rounded-lg border border-slate-200 text-slate-400 hover:text-slate-600">
+                <button onclick="fastForwardTime('${b.id}')" title="데모용 12시간 경과" class="p-1.5 rounded-lg border border-slate-200 text-slate-400 hover:text-slate-600 transition">
                   +12h
                 </button>
               ` : `
+                <button onclick="openBarcodeModal('${b.id}')" class="flex-1 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition">
+                  바코드 제시
+                </button>
+                <button onclick="selectMonitorBooking('${b.id}')" class="flex-1 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition">
+                  슬롯 위치 확인
+                </button>
+              `) : `
                 <span class="text-[11px] text-slate-400 font-medium">출고 완료된 보관 건임</span>
                 <button onclick="openClaimModal('${b.id}')" class="ml-auto px-2.5 py-1 rounded-lg bg-rose-50 text-rose-700 text-xs font-bold">
                   사고 접수
@@ -2846,6 +3216,7 @@
           </div>
         `;
       }).join('');
+      if (window.lucide) lucide.createIcons();
     }
 
     function fastForwardTime(bookingId) {
